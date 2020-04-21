@@ -1,9 +1,5 @@
 <template>
-  <div>
-
-	  <BackTop :target="getTarget" :bottom="0" :right="50"></BackTop>
-
-	<section class="header text-center">
+  <section class="header text-center">
 		<nav class="navbar navbar-expand-lg navbar-light navbar-custom">
 			<div class="container"><a class="navbar-brand" href="index.html"><i class="fas fa-shopping-bag primary-color mr-1"></i>美多商城</a>
 				<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-1" aria-controls="navbar-1" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
@@ -59,13 +55,13 @@
 											<h6 class="text-uppercase">Featured Items</h6>
 											<div class="row">
 												<div class="col-6 text-center"><a href="item.html">
-													<img src="images/placeholder-product.jpg" alt="" class="img-fluid mt-2 mb-3"></a>
+													<img src="../assets/images/placeholder-product.jpg" alt="" class="img-fluid mt-2 mb-3"></a>
 													<h6 class="mb-0"><a href="item.html">Product Name</a></h6>
 													<p><span class="emphasis">$49.00</span></p>
 													<a href="#" class="btn btn-sm btn-outline-secondary mt-0">Buy Now</a>
 										</div>
 												<div class="col-6 text-center"><a href="item.html">
-													<img src="images/placeholder-product.jpg" alt="" class="img-fluid mt-2 mb-3"></a>
+													<img src="../assets/images/placeholder-product.jpg" alt="" class="img-fluid mt-2 mb-3"></a>
 													<h6 class="mb-0"><a href="item.html">Product Name</a></h6>
 													<p><span class="emphasis">$49.00</span></p>
 													<a href="#" class="btn btn-sm btn-outline-secondary mt-0">Buy Now</a>
@@ -96,7 +92,7 @@
 								<ul class="shopping-cart-items">
 									<li class="row">
 										<div class="col-3">
-											<img src="images/placeholder-product.jpg" width="60">
+											<img src="../assets/images/placeholder-product.jpg" width="60">
 										</div>
 										<div class="col-9">
 											<h6><a href="item.html">Product Name</a></h6>
@@ -105,7 +101,7 @@
 									</li>
 									<li class="row">
 										<div class="col-3">
-											<img src="images/placeholder-product.jpg" width="60">
+											<img src="../assets/images/placeholder-product.jpg" width="60">
 										</div>
 										<div class="col-9">
 											<h6><a href="item.html">Product Name</a></h6>
@@ -114,7 +110,7 @@
 									</li>
 									<li class="row">
 										<div class="col-3">
-											<img src="images/placeholder-product.jpg" width="60">
+											<img src="../assets/images/placeholder-product.jpg" width="60">
 										</div>
 										<div class="col-9">
 											<h6><a href="item.html">Product Name</a></h6>
@@ -130,66 +126,14 @@
 			</div>
 		</nav>
 	</section>
-	
-
-	<section class="featured-block text-center">
-		<div class="container">
-			
-			123123,你好你好你好
-
-
-
-		</div>
-	</section>
-	
-
-	
-	
-	
-	<footer class="footer">
-
-		<div class="container">
-			@v3u.cn
-		</div>
-		
-		
-	</footer>
-    
-  </div>
-  
 </template>
 
-
- 
 <script>
-
-
 export default {
-  data () {
-    return {
-      msg: "这是一个变量",
-    }
-  },
-  mounted:function(){
 
-   
-  
-},
-  methods:{
-
-	  getTarget() {
-      return document.querySelector('.right-frame');
-    }
-
-     
-  }
 }
-
-
 </script>
- 
+
 <style>
-
-
 
 </style>

@@ -5,6 +5,8 @@ import cart from '@/components/cart'
 import item from '@/components/item'
 import detail from '@/components/detail'
 import mytest from '@/components/mytest'
+import test from '@/components/test'
+import myheader from '@/components/myheader'
 
 Vue.use(Router)
 
@@ -33,6 +35,16 @@ var routes = [
           path:'/mytest',
           name:'mytest',
           component:mytest
+        },
+        {
+          path:'/test',
+          name:'test',
+          component:test
+        },
+        {
+          path:'/myheader',
+          name:'myheader',
+          component:myheader
         }
 ]
 
