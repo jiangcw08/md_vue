@@ -109,7 +109,7 @@ export default {
 
 		  var total = 0;
 
-		  for(let i=1,l=this.goods.length;i<l;i++){
+		  for(let i=0,l=this.goods.length;i<l;i++){
 
 			  total += (this.goods[i].price * this.goods[i].num);
 
