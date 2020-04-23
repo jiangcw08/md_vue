@@ -7,7 +7,7 @@ import detail from '@/components/detail'
 import mytest from '@/components/mytest'
 import test from '@/components/test'
 import myheader from '@/components/myheader'
-
+import register from '@/components/register'
 Vue.use(Router)
 
 var routes = [
@@ -45,6 +45,11 @@ var routes = [
           path:'/myheader',
           name:'myheader',
           component:myheader
+        },
+        {
+          path:'/register',
+          name:'register',
+          component:register
         }
 ]
 
