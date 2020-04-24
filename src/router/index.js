@@ -8,6 +8,7 @@ import mytest from '@/components/mytest'
 import test from '@/components/test'
 import myheader from '@/components/myheader'
 import register from '@/components/register'
+import login from '@/components/login'
 Vue.use(Router)
 
 var routes = [
@@ -50,6 +51,11 @@ var routes = [
           path:'/register',
           name:'register',
           component:register
+        },
+        {
+          path:'/login',
+          name:'login',
+          component:login
         }
 ]
 

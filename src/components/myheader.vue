@@ -124,12 +124,44 @@
 					</ul>
 				</div>
 			</div>
+
+			<div v-if="username == null">
+
+				<router-link to="/login">登录</router-link>/
+				<router-link to="/register">注册</router-link>
+
+			</div>
+			<div v-else>
+				欢迎您:{{ username }}
+
+				&nbsp;
+				<a href="#" @click="loginout">登出</a>
+			</div>
 		</nav>
 	</section>
 </template>
 
 <script>
 export default {
+
+	data(){
+		return{
+			username:localStorage.getItem('username')
+		}
+	},
+	mounted(){
+
+		console.log(this.username)
+	},	
+	methods:{
+		loginout(){
+
+			localStorage.removeItem('username')
+			this.$router.go(0)
+
+
+		}
+	}
 
 }
 </script>
