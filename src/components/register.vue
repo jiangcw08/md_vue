@@ -28,6 +28,14 @@
                     </tr>
 
                     <tr>
+                        <td>验证码：</td>
+                        <td><input type="text" v-model="code"></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><img class="imgcode" alt="点击刷新" :src="src" @click="changeimage"></td>
+                    </tr>
+                    <tr>
                         <td></td>
                         <td><Button color="green" @click="sub">注册</Button></td>
                     </tr>
@@ -52,6 +60,8 @@ export default {
             username:'',
             password:'',
             phone:'',
+            code:'',
+            src:'http://localhost:8000/code/',
 
         }
     },
@@ -60,7 +70,14 @@ export default {
     },
     methods:{
 
+        //刷新验证码
+        changeimage:function(){
 
+            //随机字符串
+            var num = Math.ceil(Math.random()*10);
+            //赋值地址
+            this.src = this.src + "?code=" + num;
+        },
 
 
         //提交注册
@@ -85,7 +102,7 @@ export default {
                 this.$Message('请输入正确的手机号')
                 return false
             }        
-            this.axios.get('http://localhost:8000/register/',{params:{phone:this.phone,username:this.username,password:this.password}}).then((result=>{
+            this.axios.get('http://localhost:8000/register/',{params:{code:this.code,phone:this.phone,username:this.username,password:this.password}}).then((result=>{
 
                 this.$Message(result.data.message)
             }))
@@ -102,6 +119,10 @@ export default {
 
 td{
     padding: 10px;
+}
+
+.imgcode{
+   cursor:pointer; 
 }
 
 </style>

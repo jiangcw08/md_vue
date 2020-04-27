@@ -15,7 +15,8 @@ require('!style-loader!css-loader!./assets/index.css');
 import Axios from 'axios'
 Vue.prototype.axios = Axios;
 
-//Axios.defaults.withCredentials = true;
+//是否携带cookie发送请求
+// Axios.defaults.withCredentials = true;
 
 import QS from 'qs'
 Vue.prototype.qs = QS;
