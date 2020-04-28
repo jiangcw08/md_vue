@@ -125,7 +125,7 @@
 				</div>
 			</div>
 
-			<div v-if="username == null">
+			<div v-if="username == ''">
 
 				<router-link to="/login">登录</router-link>/
 				<router-link to="/register">注册</router-link>
@@ -146,18 +146,39 @@ export default {
 
 	data(){
 		return{
-			username:localStorage.getItem('username')
+			username:''
 		}
 	},
 	mounted(){
 
 		console.log(this.username)
+
+		//新浪登录
+		var sina_name = this.$route.query.sina_name;
+
+		if(sina_name){
+
+			//自动登录
+			localStorage.setItem('username',sina_name)
+			localStorage.setItem('uid',this.$route.query.uid)
+		}
+
+		//判断是否登
+		var name = localStorage.getItem('username')
+
+		if(name == null){
+			this.username == ''
+		}else{
+			this.username = name
+		}
 	},	
 	methods:{
 		loginout(){
 
 			localStorage.removeItem('username')
-			this.$router.go(0)
+
+			this.username = ''
+			this.$router.push('/')
 
 
 		}

@@ -48,7 +48,13 @@
 
                     <tr>
                         <td></td>
-                        <td><Button color="green" @click="sub">登录</Button></td>
+                        <td><Button color="green" @click="sub">登录</Button>
+
+                            &emsp;&emsp;
+
+                            <img @click="sina" class="sina" src="http://localhost:8000/static/sina.png">
+                        
+                        </td>
                     </tr>
                 </table>
 
@@ -90,6 +96,19 @@ export default {
         dragVerify
     },
     methods:{
+
+
+
+        //新浪登录
+        sina(){
+
+
+            //拼接url
+		    let url = "https://api.weibo.com/oauth2/authorize?client_id=518243583&redirect_uri=http://127.0.0.1:8000/sina_weibo"
+            //跳转
+            window.location.href = url;
+
+        },
 
         
         
@@ -153,6 +172,9 @@ export default {
 
 td{
     padding: 10px;
+}
+.sina{
+    cursor: pointer;
 }
 
 </style>
