@@ -1,7 +1,7 @@
 //常量的定义
 
 export const config = {
-    baseurl:'http://172.16.114.5:8088/MGT2'
+    baseurl:'http://q9ksrmfb3.bkt.clouddn.com/'
   }
   
   //函数的定义
