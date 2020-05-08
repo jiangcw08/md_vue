@@ -12,7 +12,7 @@ Vue.use(VueI18n);
 //导入语言包
 const i18n = new VueI18n({
   //定义默认语言
-  locale:'en',
+  locale:'zh',
   //语言包声明
   messages:{
     'zh':require('./lang/zh'),

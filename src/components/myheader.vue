@@ -137,6 +137,15 @@
 				&nbsp;
 				<a href="#" @click="loginout">登出</a>
 			</div>
+			
+			<!-- 语言切换开关 -->
+			<div>
+				
+				<h-switch v-model="lang" @change="xuanze">中/英</h-switch>
+
+			</div>
+			<!-- end -->
+
 		</nav>
 	</section>
 </template>
@@ -146,12 +155,35 @@ export default {
 
 	data(){
 		return{
-			username:''
+			username:'',
+			//语言切换变量
+			lang:0
 		}
 	},
 	//钩子方法
 	mounted(){
 
+
+		var lang_locale = localStorage.getItem('lang')
+
+		if(lang_locale){
+			this.$i18n.locale = lang_locale
+			if(lang_locale == 'zh'){
+				this.lang = 0
+			}else{
+				this.lang = 1;
+			}
+		
+			
+		}else{
+			this.$i18n.locale = 'zh'
+			this.lang = 0
+
+		}
+
+
+
+		//根据浏览器默认语言 自动选择语言
 		// var language = navigator.language
 
 		// if(language == 'zh-CN'){
@@ -180,6 +212,21 @@ export default {
 		}
 	},	
 	methods:{
+
+
+		//语言切换
+		xuanze(){
+
+			if(this.lang == 1){
+				this.$i18n.locale = 'en'
+				localStorage.setItem('lang','en')
+			}else{
+				this.$i18n.locale = 'zh'
+				localStorage.setItem('lang','zh')
+			}
+
+
+		},
 		loginout(){
 
 			localStorage.removeItem('username')
