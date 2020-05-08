@@ -22,8 +22,19 @@
                     
                     <tr>
                         <td> qiniu：</td>
-                        <td><input type="file" @change="qn_upload"></td>
+                        <td>
+                            
+                            <input type="file" @change="qn_upload">
+                            <!-- {{  load_percentL }} -->
+                            <!-- 进度条标签 -->
+                            <Progress :percent="load_int" v-show="load_int">
+                                <span slot="text"> {{ load_int }}%</span>
+                            </Progress>
+
+                        
+                        </td>
                     </tr>
+                    
 
                     <tr>
                         <td></td>
@@ -78,6 +89,10 @@ export default {
             token:'',
             //视频地址
             videosrc:'',
+            //上传进度展示
+            load_percentL:'',
+            //整形进度变量
+            load_int:0,
       
 
 
@@ -148,9 +163,15 @@ export default {
         //获取用户信息
         get_user(){
 
-            this.axios.get('http://localhost:8000/userinfo/',{params:{'id':localStorage.getItem('uid')}}).then(result=>{
+            this.axios.get('http://localhost:8000/userinfo/',{params:{'id':localStorage.getItem('uid'),'jwt':localStorage.getItem('jwt')}}).then(result=>{
 
-                // console.log(result)
+                console.log(result)
+
+                if(result.data.code == 400){
+                    this.$Message(result.data.message)
+                    localStorage.removeItem('username')
+                    this.$router.push('/')
+                }
 
                 // this.src  = config['baseurl']+result.data.img;
                 this.src  = "http://localhost:8000/static/upload/"+result.data.img;
@@ -176,8 +197,25 @@ export default {
                 method:'POST',
                 url:'http://up-z1.qiniu.com/',
                 data:param,
-                timeout:30000
+                timeout:30000,
+
+                onUploadProgress:(e)=>{
+
+                    //计算上传百分比
+                    var complete = (e.loaded / e.total);
+                    
+                    if(complete < 1){
+                        this.load_percentL = (complete * 100).toFixed(2) + '%';
+                        this.load_int = parseInt((complete * 100).toFixed(2));
+                    }
+
+                }
+
             }).then(result=>{
+
+                //手动赋值100%
+                this.load_percentL = '100%'; 
+                this.load_int = 100;
                 // console.log(result)
 
                 this.src = config['baseurl']+result.data.key;
@@ -228,6 +266,8 @@ export default {
 
    
             this.axios.post('http://localhost:8000/file/',param,config).then((result=>{
+
+                
 
                 this.src = 'http://localhost:8000/static/upload/'+result.data.filename
 

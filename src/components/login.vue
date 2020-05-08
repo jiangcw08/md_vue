@@ -151,6 +151,7 @@ export default {
 
                     localStorage.setItem('uid',result.data.uid)
                     localStorage.setItem('username',result.data.username)
+                    localStorage.setItem('jwt',result.data.jwt)
 
                     this.$router.push('/')
 
