@@ -4,6 +4,22 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 
+// ================================== 国际化 ===========================================
+//导入国际化组件
+import VueI18n from 'vue-i18n'
+//注册组件
+Vue.use(VueI18n);
+//导入语言包
+const i18n = new VueI18n({
+  //定义默认语言
+  locale:'en',
+  //语言包声明
+  messages:{
+    'zh':require('./lang/zh'),
+    'en':require('./lang/en')
+  }
+})
+// ====================================== END =======================================
 
 Vue.config.productionTip = false
 
@@ -24,9 +40,12 @@ Vue.prototype.qs = QS;
 import HeyUI from 'heyui';
 Vue.use(HeyUI);
 
+
+//引入i18n
 new Vue({
   el: '#app',
   router,
+  i18n,
   components: { App },
   template: '<App/>',
   render: h => h(App)

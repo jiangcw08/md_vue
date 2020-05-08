@@ -165,7 +165,7 @@ export default {
 
             this.axios.get('http://localhost:8000/userinfo/',{params:{'id':localStorage.getItem('uid'),'jwt':localStorage.getItem('jwt')}}).then(result=>{
 
-                console.log(result)
+                // console.log(result)
 
                 if(result.data.code == 400){
                     this.$Message(result.data.message)
