@@ -10,6 +10,7 @@ import myheader from '@/components/myheader'
 import register from '@/components/register'
 import login from '@/components/login'
 import myprofile from '@/components/myprofile'
+import kaoshi from '@/components/kaoshi'
 Vue.use(Router)
 
 var routes = [
@@ -73,6 +74,11 @@ var routes = [
               next('/login');
             }
           }
+        },
+        {
+          path:'/kaoshi',
+          name:'kaoshi',
+          component:kaoshi
         }
 ]
 
