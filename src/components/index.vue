@@ -7,23 +7,12 @@
 		<div id="carousel" class="carousel slide" data-ride="carousel">
 		
 	
-			<ul class="carousel-indicators">
-				<li data-target="#carousel" data-slide-to="0" class="active"></li>
-				<li data-target="#carousel" data-slide-to="1"></li>
-				<li data-target="#carousel" data-slide-to="2"></li>
-			</ul>
-	
 			<div class="carousel-inner">
 			
 				<!--Text only with background image-->
 				<div class="carousel-item active">
-					<div class="container slide-textonly">
-						<div>
-							<h1>York &amp; Smith</h1>
-							<p class="lead">Spring/Summer 2018 Collection</p>
-							<a href="#" class="btn btn-outline-secondary">View Collection</a>
-						</div>
-					</div>
+						<!-- 轮播图 -->
+						<Carousel @click="clickimg" @change="changeimg" :datas="imgs"></Carousel>
 				</div>
 				
 				
@@ -167,11 +156,12 @@ export default {
   data () {
     return {
       msg: "这是一个变量",
+	  imgs:[],
     }
   },
   mounted:function(){
 
-   
+	  this.get_caroule();
   
 },
 
@@ -179,6 +169,29 @@ components:{
 	myheader
 },
   methods:{
+
+	  //获取轮播图数据
+	  get_caroule(){
+		  this.axios.get('http://localhost:8000/getcaroule/').then(result=>{
+			  console.log(result.data)
+
+			  var datas = result.data;
+			  var datass = []
+		  })
+	  },
+
+	  clickimg(index,data){
+
+		  alert(data.link)
+		  
+		  window.location.href = data.link;
+	  },
+
+	  changeimg:function(index,data){
+
+		//   console.log(data)
+
+	  }
 
      
   }
