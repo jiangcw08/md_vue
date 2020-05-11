@@ -245,8 +245,17 @@ li.nav-item .btn-white {
 li.nav-item .active {
   font-weight: bold; }
 
+
+:root{
+
+  --bg-color:#fff;
+
+
+}
+
+
 .header {
-  background: #fff;
+  background:var(--bg-color);
   min-height: 7em;
   height: auto;
   border-radius: 0;

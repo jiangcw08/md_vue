@@ -170,13 +170,35 @@ components:{
 },
   methods:{
 
+
+	  //切换主题颜色
+	  change_back:function(){
+
+		  //获取样式表
+		  var styles = getComputedStyle(document.documentElement);
+
+		  
+
+
+	  },
+
 	  //获取轮播图数据
 	  get_caroule(){
 		  this.axios.get('http://localhost:8000/getcaroule/').then(result=>{
-			  console.log(result.data)
+			//   console.log(result.data)
 
 			  var datas = result.data;
 			  var datass = []
+			  for(let i=0,l=datas.length;i<l;i++){
+
+				  datass.push({'title':datas[i].name,'link':datas[i].src,'image':datas[i].img})
+
+
+
+				  this.imgs = datass
+
+			  }
+
 		  })
 	  },
 

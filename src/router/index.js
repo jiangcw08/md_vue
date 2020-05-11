@@ -11,6 +11,7 @@ import register from '@/components/register'
 import login from '@/components/login'
 import myprofile from '@/components/myprofile'
 import kaoshi from '@/components/kaoshi'
+import addgoods from '@/components/addgoods'
 Vue.use(Router)
 
 var routes = [
@@ -79,6 +80,11 @@ var routes = [
           path:'/kaoshi',
           name:'kaoshi',
           component:kaoshi
+        },
+        {
+          path:'/addgoods',
+          name:'addgoods',
+          component:addgoods
         }
 ]
 
