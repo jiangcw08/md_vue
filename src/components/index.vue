@@ -9,13 +9,8 @@
 	
 			<div class="carousel-inner">
 			
-				<!--Text only with background image-->
-				<div class="carousel-item active">
-						<!-- 轮播图 -->
-						<Carousel @click="clickimg" @change="changeimg" :datas="imgs"></Carousel>
-				</div>
-				
-				
+								<!-- 轮播图 -->
+				<Carousel :height="500" @click="clickimg" :datas="imgs"></Carousel>	
 			
 			</div>
 		</div>
@@ -45,7 +40,9 @@
     </section>
     
 		<section class="featured-block text-center">
-			<div class="container">
+
+			<!-- 中间展示 -->
+						<div class="container">
 				<div class="row justify-center">
 					<div class="col-md-6 text-center">
 						<img class="mt-4 mb-4 img-fluid" src="../assets/images/placeholder-jacket.png" style="width: 100%;">
@@ -58,61 +55,31 @@
 					</div>
 				</div>
 			</div>
+			<!-- end -->
 		</section>
 		
 		<section class="products text-center">
 			<div class="container">
-				<h3 class="mb-4">Featured Products</h3>
+				<h3 class="mb-4">商品列表</h3>
 				<div class="row">
-					<div class="col-sm-6 col-md-3 col-product">
+					<div class="col-sm-6 col-md-3 col-product" v-for="(item,index) in goods" :key="index">
 						<figure>
-							<img class="rounded-corners img-fluid" src="../assets/images/placeholder-product.jpg"	width="240" height="240">
+							<img class="rounded-corners img-fluid" :src="'http://localhost:8000/static/upload/'+item.img"	width="240" height="240">
 							<figcaption>
-								<div class="thumb-overlay"><a href="item.html" title="More Info">
+								<div class="thumb-overlay"><a :href="'http://localhost:8080/item/?id='+item.id" title="More Info">
 									<i class="fas fa-search-plus"></i>
 								</a></div>
 							</figcaption>
 						</figure>
-						<h4><a href="item.html">Product Name</a></h4>
-						<p><span class="emphasis">$19.00</span></p>
-					</div>
-					<div class="col-sm-6 col-md-3 col-product">
-						<figure>
-							<img class="rounded-corners img-fluid" src="../assets/images/placeholder-product.jpg"	width="240" height="240">
-							<figcaption>
-								<div class="thumb-overlay"><a href="item.html" title="More Info">
-									<i class="fas fa-search-plus"></i>
-								</a></div>
-							</figcaption>
-						</figure>
-						<h4><a href="item.html">Product Name</a></h4>
-						<p><span class="emphasis">$19.00</span></p>
-					</div>
-					<div class="col-sm-6 col-md-3 col-product">
-						<figure>
-							<img class="rounded-corners img-fluid" src="../assets/images/placeholder-product.jpg"	width="240" height="240">
-							<figcaption>
-								<div class="thumb-overlay"><a href="item.html" title="More Info">
-									<i class="fas fa-search-plus"></i>
-								</a></div>
-							</figcaption>
-						</figure>
-						<h4><a href="item.html">Product Name</a></h4>
-						<p><span class="emphasis">$19.00</span></p>
-					</div>
-					<div class="col-sm-6 col-md-3 col-product">
-						<figure>
-							<img class="rounded-corners img-fluid" src="../assets/images/placeholder-product.jpg"	width="240" height="240">
-							<figcaption>
-								<div class="thumb-overlay"><a href="item.html" title="More Info">
-									<i class="fas fa-search-plus"></i>
-								</a></div>
-							</figcaption>
-						</figure>
-						<h4><a href="item.html">Product Name</a></h4>
-						<p><span class="emphasis">$19.00</span></p>
-					</div>
+						<h4><a :href="'http://localhost:8080/item/?id='+item.id">{{ item.name }}</a></h4>
+						<p><span class="emphasis">${{ item.price }}</span></p>
+					</div>		
+
+								
 				</div>
+
+				<!-- 分页 -->
+				<Pagination v-model="pagination" @change="currentChange" small></Pagination>
 			</div>
 		</section>
 		
@@ -157,11 +124,19 @@ export default {
     return {
       msg: "这是一个变量",
 	  imgs:[],
+	  goods:[],
+	  pagination: {
+        page: 1,
+        size: 2,
+        total: 1
+      },
     }
   },
   mounted:function(){
 
 	  this.get_caroule();
+	  this.get_goods();
+	  
   
 },
 
@@ -169,6 +144,35 @@ components:{
 	myheader
 },
   methods:{
+
+
+	  //分页
+	  currentChange(value){
+		  
+		  var page = value.page
+
+
+		  this.axios.get('http://localhost:8000/goodslist/',{params:{'page':page}}).then(result=>{
+
+			  this.goods = result.data.data;
+		  })
+
+	  },
+
+	  //获取商品列表
+	  get_goods(){
+
+		  this.axios.get('http://localhost:8000/goodslist/').then(result=>{
+
+			  this.goods = result.data.data
+			  this.pagination.total = result.data.total
+			  this.pagination.page = Math.ceil(result.data.total)
+	
+			  
+
+		  })
+
+	  },
 
 
 	  //切换主题颜色
@@ -191,11 +195,12 @@ components:{
 			  var datass = []
 			  for(let i=0,l=datas.length;i<l;i++){
 
-				  datass.push({'title':datas[i].name,'link':datas[i].src,'image':datas[i].img})
+				  datass.push({'title':datas[i].name,'link':datas[i].src,'image':'http://localhost:8000/static/upload/'+datas[i].img})
 
 
 
 				  this.imgs = datass
+				//   console.log(this.imgs)
 
 			  }
 
@@ -204,16 +209,11 @@ components:{
 
 	  clickimg(index,data){
 
-		  alert(data.link)
+		  alert('即将跳转到'+data.link)
 		  
 		  window.location.href = data.link;
 	  },
 
-	  changeimg:function(index,data){
-
-		//   console.log(data)
-
-	  }
 
      
   }

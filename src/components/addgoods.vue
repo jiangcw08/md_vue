@@ -94,9 +94,15 @@ export default {
                 for(let i=0;i<result.data.length;i++){
 
                     mycate.push({'key':result.data[i].id,'title':result.data[i].name})
+
+                    // this.cate[result.data[i].name] = [result.data[i].id]
+
+                    // console.log(this.cate)
                 }
 
                 this.cate = mycate
+              
+
             })
         },
 
@@ -106,7 +112,10 @@ export default {
 
 
 
+            console.log(this.selected)
+            return false;
 
+            
             let params = {};
             params['brand'] = this.brand;
             params['type'] = this.type;
