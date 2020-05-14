@@ -113,7 +113,7 @@ export default {
 
 
             console.log(this.selected)
-            return false;
+           
 
             
             let params = {};
@@ -129,7 +129,7 @@ export default {
    
             this.axios.post('http://localhost:8000/insertgoods/',data).then((result=>{
 
-                // console.log(result.data.message)
+                console.log(result.data.message)
                 this.$Message(result.data.message)
             }))
            

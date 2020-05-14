@@ -12,6 +12,7 @@ import login from '@/components/login'
 import myprofile from '@/components/myprofile'
 import kaoshi from '@/components/kaoshi'
 import addgoods from '@/components/addgoods'
+import search from '@/components/search'
 Vue.use(Router)
 
 var routes = [
@@ -85,6 +86,11 @@ var routes = [
           path:'/addgoods',
           name:'addgoods',
           component:addgoods
+        },
+        {
+          path:'/search',
+          name:'search',
+          component:search
         }
 ]
 

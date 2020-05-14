@@ -60,10 +60,14 @@
 		
 		<section class="products text-center">
 			<div class="container">
-				<h3 class="mb-4">商品列表</h3>
+				<h3 class="mb-4">HeyUI分页</h3>
+
+				<Button @click="get_goods(price)">价格从高到低</Button><Button @click="get_goods({'price':'+'})">价格从低到高</Button>
 				<div class="row">
+					
 					<div class="col-sm-6 col-md-3 col-product" v-for="(item,index) in goods" :key="index">
 						<figure>
+							
 							<img class="rounded-corners img-fluid" :src="'http://localhost:8000/static/upload/'+item.img"	width="240" height="240">
 							<figcaption>
 								<div class="thumb-overlay"><a :href="'http://localhost:8080/item/?id='+item.id" title="More Info">
@@ -74,12 +78,51 @@
 						<h4><a :href="'http://localhost:8080/item/?id='+item.id">{{ item.name }}</a></h4>
 						<p><span class="emphasis">${{ item.price }}</span></p>
 					</div>		
-
-								
+	
 				</div>
 
-				<!-- 分页 -->
-				<Pagination v-model="pagination" @change="currentChange" small></Pagination>
+				<!-- HeyUI分页 -->
+					<Pagination small @change="get_goods" v-model="pagination" ></Pagination>   
+
+					
+			
+			</div>
+
+						<div class="container">
+				<h3 class="mb-4">自主分页</h3>
+				<div class="row">
+					
+					<div class="col-sm-6 col-md-3 col-product" v-for="(item,index) in goods_self" :key="index">
+						<figure>
+							
+							<img class="rounded-corners img-fluid" :src="'http://localhost:8000/static/upload/'+item.img"	width="240" height="240">
+							<figcaption>
+								<div class="thumb-overlay"><a :href="'http://localhost:8080/item/?id='+item.id" title="More Info">
+									<i class="fas fa-search-plus"></i>
+								</a></div>
+							</figcaption>
+						</figure>
+						<h4><a :href="'http://localhost:8080/item/?id='+item.id">{{ item.name }}</a></h4>
+						<p><span class="emphasis">${{ item.price }}</span></p>
+					</div>		
+	
+				</div>
+
+				<Button v-show="lastpage" @click="get_goods_self(lastpage)">上一页</Button>
+					
+					<span v-for="(item,index) in lpage" :key="index">
+						<a @click="get_goods_self(item)">{{ item }}</a>&nbsp;&nbsp;
+					</span>
+
+					<a @click="get_goods_self(page)">{{  page }}</a>&nbsp;&nbsp;
+
+					<span v-for="item in rpage">
+						<a @click="get_goods_self(item)">{{ item }}</a>&nbsp;&nbsp;
+					</span>	
+
+				<Button v-show="nextpage" @click="get_goods_self(nextpage)">下一页</Button>
+
+				<input size="1" type="text" @input="jump_page($event)">
 			</div>
 		</section>
 		
@@ -124,11 +167,23 @@ export default {
     return {
       msg: "这是一个变量",
 	  imgs:[],
+	  //分页偏移
+	  lpage:[],
+	  rpage:[],	  
+	  //自主分页数据
+	  lastpage:0,
+	  nextpage:0,
+	  page:1,
+	  goods_self:[],
+	  total_self:0,
+	  allpage:0,
+	  size:1,
+	  //HeyUI分页数据
 	  goods:[],
 	  pagination: {
         page: 1,
         size: 2,
-        total: 1
+        total: 4
       },
     }
   },
@@ -136,6 +191,7 @@ export default {
 
 	  this.get_caroule();
 	  this.get_goods();
+	  this.get_goods_self(1);
 	  
   
 },
@@ -144,31 +200,95 @@ components:{
 	myheader
 },
   methods:{
+	  //自主分页跳转
+	  jump_page(e){
+
+		  var val = e.target.value;
+		  console.log(val)
+
+		  if(val >this.allpage){
+			  this.$Message('超过页码范围')
+			  return false;
+		  }else{
+			  if(val != ''){
+				  this.get_goods_self(val)
+			  }
+			  
+		  }
+
+	  },
+
+	  //自主分页
+	  get_goods_self(page){
 
 
-	  //分页
-	  currentChange(value){
-		  
-		  var page = value.page
+		  this.page = page
 
+		  this.axios.get('http://localhost:8000/goodslist/',{params:{'page':page,'size':this.size}}).then(result=>{
 
-		  this.axios.get('http://localhost:8000/goodslist/',{params:{'page':page}}).then(result=>{
+			  this.goods_self = result.data.data;
+			  this.total_self = result.data.total;
+			  
+			  
+			  //判断上一页
+			  if(page==1){
+				  this.lastpage = page;
+			  }else{
+				  this.lastpage = page - 1;
+			  }
+			  //计算总页数
+			  this.allpage = Math.ceil(this.total_self / this.size)
 
-			  this.goods = result.data.data;
+			  //判断下一页
+			  if(page == this.allpage){
+				  this.nextpage = page;
+			  }else{
+				  this.nextpage = page + 1;
+			  }
+			
+			  //设置偏移量
+			  var move_page = 2;
+
+			  var lpage = [];
+
+			  //计算左侧偏移量
+			  for(let i=page-move_page;i<page;i++){
+				  
+				  if(i>0){
+					  lpage.push(i);
+				  }
+			  }
+			  this.lpage = lpage;
+			  //计算右侧偏移量
+			  var move_page = 2;
+
+			  var rpage = [];
+
+			  //计算左侧偏移量
+			  for(let i=page+1;i<=page+move_page;i++){
+				  
+				  if(i <= this.allpage){
+					  rpage.push(i);
+				  }
+
+			  }
+			  this.rpage = rpage;
+
 		  })
 
 	  },
 
-	  //获取商品列表
-	  get_goods(){
+	  //HeiUI分页
+	  get_goods(value){
 
-		  this.axios.get('http://localhost:8000/goodslist/').then(result=>{
+
+		  console.log(value)
+
+		  this.axios.get('http://localhost:8000/goodslist/',{params:{page:this.pagination.page,size:this.pagination.size}}).then(result=>{
 
 			  this.goods = result.data.data
 			  this.pagination.total = result.data.total
-			  this.pagination.page = Math.ceil(result.data.total)
-	
-			  
+  
 
 		  })
 
