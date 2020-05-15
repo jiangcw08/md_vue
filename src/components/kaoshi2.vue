@@ -3,25 +3,19 @@
 
   <div>
 
-    <div>
-      <!-- 检索 -->
-      <Search v-model="text" @search="search"></Search>
-    </div>
-
     <div v-for="(item,index) in goods" :key="index">
 
       <img :src="'http://localhost:8000/static/upload/'+item.img"	width="240" height="240">
 
-      {{item.name}} 
 
-      <!-- <div v-html="item.name"></div> -->
+
+      <div v-html="item.name"></div>
       ￥{{  item.price }}
       {{  item.desc}}
 
     </div>
 
-    <!-- 分页 -->
-    <Pagination small @change="get_goods" v-model="pagination" ></Pagination>   
+    					<Pagination small @change="get_goods" v-model="pagination" ></Pagination>   
 
 
 
@@ -46,27 +40,21 @@ export default {
   },
 
   mounted(){
-
+    this.text = this.$route.query.text;
     this.get_goods();
   },
   methods:{
-    
-    //检索
-		search:function(){
 
-			console.log(this.text);
-
-			//跳转
-			this.$router.push({path:'/kaoshi2',query:{text:this.text}});
-		},
-
-			
 
     //HeiUI分页
 	  get_goods(value){
 
-		  this.axios.get('http://localhost:8000/kaoshi/',{params:{page:this.pagination.page,size:this.pagination.size}}).then(result=>{
-       
+		  this.axios.get('http://localhost:8000/kaoshi/',{params:{text:this.text,page:this.pagination.page,size:this.pagination.size}}).then(result=>{
+       	//手动高亮
+			  for(let i=0;i<result.data.data.length;i++){
+
+				  result.data.data[i]['name'] = result.data.data[i]['name'].replace(new RegExp(this.text,'g'),'<span class="highlight">'+this.text+'</span>')
+			  }
 			  this.goods = result.data.data
 			  this.pagination.total = result.data.total
   
@@ -81,6 +69,10 @@ export default {
 </script>
 
 <style>
+
+.highlight{
+	color: chartreuse;
+}
 
 
 </style>

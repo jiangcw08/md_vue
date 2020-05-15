@@ -13,6 +13,7 @@ import myprofile from '@/components/myprofile'
 import kaoshi from '@/components/kaoshi'
 import addgoods from '@/components/addgoods'
 import search from '@/components/search'
+import kaoshi2 from '@/components/kaoshi2'
 Vue.use(Router)
 
 var routes = [
@@ -91,7 +92,12 @@ var routes = [
           path:'/search',
           name:'search',
           component:search
-        }
+        },
+        {
+          path:'/kaoshi2',
+          name:'kaoshi2',
+          component:kaoshi2
+        },
 ]
 
 export default new Router({
