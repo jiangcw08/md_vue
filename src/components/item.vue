@@ -10,7 +10,8 @@
 			<div class="row">
 				<div class="col-md-6 text-center">
 					<div class="product-image mt-3">
-						<img class="img-fluid" :src="'http://localhost:8000/static/upload/'+good.img">
+						<img class="img-fluid" :src="good.img">
+
 					</div>
 					<div class="product-thumbnails"><a href="#">
 						<img class="mt-2 mr-2 img-fluid" src="../assets/images/placeholder-product.jpg" ></a>
@@ -41,14 +42,29 @@
 					
 					<!--Quantity: <input type="text" class="form-control quantity mb-4" name="" value="1">-->
 					
-					<a href="#" class="btn btn-full-width btn-lg btn-outline-primary">Add to cart</a></div>
+					<a href="#" class="btn btn-full-width btn-lg btn-outline-primary">Add to cart</a> <br><br>
+					
+					<!-- 商品评论 -->
+
+					<p class="relative" style="width: 300px"><textarea v-model="comment" style="width:100%" rows="2" maxlength="100" v-wordcount="100"></textarea></p>  
+
+					<Button @click="sub">提交评论</Button>	
+					</div>
+
+					<br>
+
+					
+
+
+
 			</div>
+
 		</div>
 	</section>
 	
 	<div class="divider"></div>
 	
-	<section class="products text-center">
+	<!-- <section class="products text-center">
 		<div class="container">
 			<h3 class="mb-4">Related Products</h3>
 			<div class="row">
@@ -102,7 +118,7 @@
 				</div>
 			</div>
 		</div>
-	</section>
+	</section> -->
 	
 	<footer class="footer">
 
@@ -129,6 +145,7 @@ export default {
 	//   商品id
 	  id:'',
 	  good:{},
+	  comment:'',
 	  //商品规格
 	  param:{},
     }
@@ -147,13 +164,32 @@ export default {
 },
   methods:{
 
+	//提交评论
+	  sub(){
+
+		this.axios.post('http://localhost:8000/addcomment/',this.qs.stringify({uid:localStorage.getItem('uid'),gid:this.id,content:this.comment})).then(result=>{
+
+			this.$Message(result.data.message)
+		})
+
+	  },
+
+
 
 	  //请求商品详情
 	  get_good(){
 		  this.axios.get('http://localhost:8000/goodinfo/',{params:{'id':this.id}}).then(result=>{
-			  console.log(result.data)
-			  this.good = result.data
-			  this.param = JSON.parse(this.good.params);
+			//   console.log(result.data)
+
+			  var data = result.data
+			  var glist = []
+			  glist.push({name:data['name'],price:data['price'],img:'http://localhost:8000/static/upload/'+data['img'],params:data['params']})
+
+			//   console.log(glist[0])
+
+			  this.good = glist[0]
+			  
+			  this.param = JSON.parse(this.good['params']);
 		  })
 	  }
 

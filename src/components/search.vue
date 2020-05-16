@@ -128,14 +128,14 @@ components:{
 
 		//   console.log(value)
 
-		  this.axios.get('http://localhost:8000/goodslist/',{params:{text:this.text,page:this.pagination.page,size:this.pagination.size}}).then(result=>{
+		  this.axios.get('http://localhost:8000/sarch/',{params:{text:this.text,page:this.pagination.page,size:this.pagination.size}}).then(result=>{
 			  
 			 
 			 //手动高亮
-			  for(let i=0;i<result.data.data.length;i++){
+			//   for(let i=0;i<result.data.data.length;i++){
 
-				  result.data.data[i]['name'] = result.data.data[i]['name'].replace(new RegExp(this.text,'g'),'<span class="highlight">'+this.text+'</span>')
-			  }
+			// 	  result.data.data[i]['name'] = result.data.data[i]['name'].replace(new RegExp(this.text,'g'),'<span class="highlight">'+this.text+'</span>')
+			//   }
 			  this.goods = result.data.data
 			  this.pagination.total = result.data.total
   
