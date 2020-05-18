@@ -253,8 +253,9 @@ export default {
 		loginout(){
 
 			localStorage.removeItem('username')
-
+			localStorage.removeItem('uid')
 			this.username = ''
+			
 			this.$router.push('/')
 
 

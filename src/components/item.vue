@@ -49,6 +49,12 @@
 					<p class="relative" style="width: 300px"><textarea v-model="comment" style="width:100%" rows="2" maxlength="100" v-wordcount="100"></textarea></p>  
 
 					<Button @click="sub">提交评论</Button>	
+
+					<!-- 评论列表 -->
+					<ul>
+						<li v-for="item in commentlist"> {{ item.uid | myfilter }} : {{ item.content }}</li>
+					</ul>
+
 					</div>
 
 					<br>
@@ -144,7 +150,10 @@ export default {
 	  msg: "这是一个变量",
 	//   商品id
 	  id:'',
+	  userlist:{},
 	  good:{},
+	  //评论列表
+	  commentlist:[],
 	  comment:'',
 	  //商品规格
 	  param:{},
@@ -154,22 +163,93 @@ export default {
   components:{
 	myheader
 },
+
+filters:{
+
+	myfilter(val){
+		//通过用户id取用户名
+		return val
+
+	},
+
+},
+
   mounted:function(){
 
 	  //获取商品id
 	  this.id = this.$route.query.id
 	  this.get_good();
+	  this.get_user();
+	  this.get_comment();
+
    
   
 },
   methods:{
 
+
+	//获取用户列表
+	get_user(){
+
+		this.axios.get('http://localhost:8000/userlist/').then(result=>{
+
+			
+			//动态赋值
+			for(let i=0;i<result.data.length;i++){
+				this.userlist[result.data[i].id]= result.data[i].username
+				
+			}
+			// console.log(this.userlist)
+		})
+
+	},
+
+
+
+	//获取商品评论
+	get_comment:function(){
+
+		this.axios.get('http:///localhost:8000/commentlist/',{params:{gid:this.id}}).then(result=>{
+			// console.log(result.data)
+
+			
+		
+			this.commentlist = result.data
+
+			for(let i=0;i<this.commentlist.length;i++){
+
+
+				this.commentlist[i].uid = this.userlist[this.commentlist[i].uid]
+				
+			}
+
+		})
+
+	},
+
 	//提交评论
 	  sub(){
+		
+		var uid = localStorage.getItem('uid')
+		// console.log(uid)
+		if(localStorage.getItem('uid') == null){
+
+			this.$Message('请先登录')
+			this.$router.push('/login')
+			return false
+		}
 
 		this.axios.post('http://localhost:8000/addcomment/',this.qs.stringify({uid:localStorage.getItem('uid'),gid:this.id,content:this.comment})).then(result=>{
 
 			this.$Message(result.data.message)
+
+			if(result.data.code == 200){
+				//追加评论内容
+				this.commentlist.unshift({'uid':localStorage.getItem('uid'),'content':this.comment})
+			}
+	
+
+			
 		})
 
 	  },
