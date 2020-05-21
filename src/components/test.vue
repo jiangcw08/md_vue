@@ -32,7 +32,7 @@ export default {
   data(){
     return{
       msg:'<h1>这是一个变量</h1>',
-      ok:0,
+      ok:1,
       counter:0,
     }
   },

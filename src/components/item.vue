@@ -52,7 +52,10 @@
 
 					<!-- 评论列表 -->
 					<ul>
-						<li v-for="item in commentlist"> {{ item.uid | myfilter }} : {{ item.content }}</li>
+						
+						<li v-for="item in commentlist"> <div class="divider"></div>{{ change_uid(item.uid) }} : {{ item.content }} <br> &nbsp;&nbsp;&nbsp;&nbsp; <span v-for="i in item.reply">{{ i.username}} 回复: {{ i.content }} <br></span> <br> <a @click="jump_comment(item.uid,item.content,item.id)"> <img :src="'http://localhost:8000/static/upload/会话.png'" width="30">评论<div class="divider"></div></a></li>
+						
+						
 					</ul>
 
 					</div>
@@ -157,6 +160,8 @@ export default {
 	  comment:'',
 	  //商品规格
 	  param:{},
+	  //评论回复变量
+	  is_comment:0,
     }
   },
 
@@ -166,11 +171,7 @@ export default {
 
 filters:{
 
-	myfilter(val){
-		//通过用户id取用户名
-		return val
 
-	},
 
 },
 
@@ -188,6 +189,28 @@ filters:{
   methods:{
 
 
+	//转换格式
+	
+
+	//跳转进行回复
+	jump_comment(uid,content,id){
+
+		var username = this.userlist[uid]
+		console.log(id)
+
+		this.$router.push({path:'/comment',query:{cid:id,username:username,content:content,gid:this.id}})
+
+	},
+
+
+  	//替换用户名
+  	change_uid:function(uid){
+
+  		return this.userlist[uid];
+
+  	},
+
+
 	//获取用户列表
 	get_user(){
 
@@ -196,7 +219,9 @@ filters:{
 			
 			//动态赋值
 			for(let i=0;i<result.data.length;i++){
-				this.userlist[result.data[i].id]= result.data[i].username
+
+				// console.log(result.data)
+				this.userlist[result.data[i]['id']]= result.data[i]['username']
 				
 			}
 			// console.log(this.userlist)
@@ -210,18 +235,27 @@ filters:{
 	get_comment:function(){
 
 		this.axios.get('http:///localhost:8000/commentlist/',{params:{gid:this.id}}).then(result=>{
-			// console.log(result.data)
+			console.log(result.data)
 
 			
 		
-			this.commentlist = result.data
+			
+			var comment_list = []
+			for(let i=0;i<result.data.length;i++){
 
-			for(let i=0;i<this.commentlist.length;i++){
+				comment_list.push({
+					uid:result.data[i].uid,
+					content:result.data[i].content,
+					id:result.data[i].id,
+					reply:JSON.parse(result.data[i].reply),
+					gid:result.data[i].gid
+				})
 
 
-				this.commentlist[i].uid = this.userlist[this.commentlist[i].uid]
 				
 			}
+			console.log(comment_list)
+			this.commentlist = comment_list
 
 		})
 

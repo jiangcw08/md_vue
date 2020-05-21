@@ -14,6 +14,7 @@ import kaoshi from '@/components/kaoshi'
 import addgoods from '@/components/addgoods'
 import search from '@/components/search'
 import kaoshi2 from '@/components/kaoshi2'
+import comment from '@/components/comment'
 Vue.use(Router)
 
 var routes = [
@@ -97,6 +98,11 @@ var routes = [
           path:'/kaoshi2',
           name:'kaoshi2',
           component:kaoshi2
+        },
+        {
+          path:'/comment',
+          name:'comment',
+          component:comment
         },
 ]
 

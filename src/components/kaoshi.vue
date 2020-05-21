@@ -1,86 +1,16 @@
 <template>
-
-
   <div>
+  <textarea v-bind:maxlength="Surplus" @input="descArea" v-model="inputText" name="abstract" id="abstract" placeholder="宝贝满足你的期待吗？说说你的使用心得，分享给想买的他们吧！"></textarea>
 
-    <div>
-      <!-- 检索 -->
-      <Search v-model="text" @search="search"></Search>
-    </div>
-
-    <div v-for="(item,index) in goods" :key="index">
-
-      <img :src="'http://localhost:8000/static/upload/'+item.img"	width="240" height="240">
-
-      {{item.name}} 
-
-      <!-- <div v-html="item.name"></div> -->
-      ￥{{  item.price }}
-      {{  item.desc}}
-
-    </div>
-
-    <!-- 分页 -->
-    <Pagination small @change="get_goods" v-model="pagination" ></Pagination>   
-
-
-
-      
   </div>
 </template>
 
 <script>
 export default {
 
-  data(){
-    return{
-      text:'',
-      //HeyUI分页数据
-      goods:[],
-      pagination: {
-          page: 1,
-          size: 2,
-          total: 4
-        },
-    }
-  },
-
-  mounted(){
-
-    this.get_goods();
-  },
-  methods:{
-    
-    //检索
-		search:function(){
-
-			console.log(this.text);
-
-			//跳转
-			this.$router.push({path:'/kaoshi2',query:{text:this.text}});
-		},
-
-			
-
-    //HeiUI分页
-	  get_goods(value){
-
-		  this.axios.get('http://localhost:8000/kaoshi/',{params:{page:this.pagination.page,size:this.pagination.size}}).then(result=>{
-       
-			  this.goods = result.data.data
-			  this.pagination.total = result.data.total
-  
-
-		  })
-
-	  },
-
-  },
-
 }
 </script>
 
 <style>
-
 
 </style>
