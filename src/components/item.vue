@@ -42,7 +42,7 @@
 					
 					<!--Quantity: <input type="text" class="form-control quantity mb-4" name="" value="1">-->
 					
-					<a href="#" class="btn btn-full-width btn-lg btn-outline-primary">Add to cart</a> <br><br>
+					<a @click="addcart" href="javascript:void(0)" class="btn btn-full-width btn-lg btn-outline-primary">添加到购物车</a> <br><br>
 					
 					<!-- 商品评论 -->
 
@@ -160,6 +160,8 @@ export default {
 	  comment:'',
 	  //商品规格
 	  param:{},
+	  //购物车列表
+	  cartlist:[],
 	  //评论回复变量
 	  is_comment:0,
     }
@@ -182,11 +184,56 @@ filters:{
 	  this.get_good();
 	  this.get_user();
 	  this.get_comment();
+	  //获取购物车
+	  this.init_cart();
+	  
 
    
   
 },
   methods:{
+	
+	//初始化购物车
+	init_cart(){
+
+		var cartdata = localStorage.getItem('cart')
+
+		if(cartdata == null){
+			this.cartlist = []
+		}else{
+			this.cartlist = JSON.parse(cartdata)
+
+		}
+		
+
+	},
+
+	//添加购物车
+	addcart(){
+
+		//默认购物车内没有商品
+		let findgood = 0;
+
+		for(let i=0;i<this.cartlist.length;i++){
+
+			if(this.good.name == this.cartlist[i]['name']){
+				this.cartlist[i]['num']++;
+
+				findgood = 1;
+				break
+			}
+			
+
+		}
+		//如果该商品没有在购物车
+		if(findgood == 0){
+			this.cartlist.push({'name':this.good.name,'price':this.good.price,'num':1,'img':this.good.img})
+		}
+
+		console.log(this.cartlist)
+		//状态保持
+		localStorage.setItem('cart',JSON.stringify(this.cartlist));
+	},
 
 
 	//转换格式
@@ -196,7 +243,7 @@ filters:{
 	jump_comment(uid,content,id){
 
 		var username = this.userlist[uid]
-		console.log(id)
+
 
 		this.$router.push({path:'/comment',query:{cid:id,username:username,content:content,gid:this.id}})
 
@@ -235,7 +282,7 @@ filters:{
 	get_comment:function(){
 
 		this.axios.get('http:///localhost:8000/commentlist/',{params:{gid:this.id}}).then(result=>{
-			console.log(result.data)
+
 
 			
 		
@@ -254,7 +301,7 @@ filters:{
 
 				
 			}
-			console.log(comment_list)
+
 			this.commentlist = comment_list
 
 		})

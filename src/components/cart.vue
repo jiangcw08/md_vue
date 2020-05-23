@@ -26,11 +26,11 @@
 						</thead>
 						<tbody>
 							<!-- 购物车商品展示 -->
-							<tr v-for="(i,index) in goods" :key="index">
+							<tr v-for="(i,index) in cartlist" :key="index">
 								<td data-th="Product">
 									<div class="row">
 										<div class="col-md-3 text-left">
-											<img :src="'http://q7tu5fm5r.bkt.clouddn.com/'+i.img" alt="" class="img-fluid">
+											<img :src="i.img" alt="" class="img-fluid">
 										</div>
 										<div class="col-md-9 text-left mt-sm-2">
 											<h4>{{ i.name }}</h4>
@@ -60,7 +60,7 @@
 				</div>
 			</div>
 			<div class="row">
-				<div class="col-sm-6 mb-3 mb-m-1 text-md-left"><a href="catalog.html"><i class="fas fa-arrow-left mr-2"></i> Continue Shopping</a></div>
+				<div class="col-sm-6 mb-3 mb-m-1 text-md-left"><a href="catalog.html"><i class="fas fa-arrow-left mr-2"></i> 继续购物</a></div>
 				<div class="col-sm-6 text-md-right"><a href="catalog.html" class="btn btn-primary btn-lg pl-5 pr-5">Checkout</a></div>
 			</div>
 		</div>
@@ -88,7 +88,8 @@ export default {
   data () {
     return {
 	  msg: "这是一个变量",
-	  goods:[{'name':'A','price':10,'img':'Fo8D4RnO9Ky67Nqbmck2Mv-Ihp1Q','num':1},{'name':'B','price':20,'img':'Fotkn9qLkYpNZtznjPh1AHRYs7cK','num':2},{'name':'C','price':30,'img':'FgA3oUSXOJQbYoqAfunVmUab0yPp','num':3}]
+	  cartlist:[],
+	  good:[],
     }
   },
   components:{
@@ -97,11 +98,30 @@ export default {
   mounted:function(){
 
 
-
+	  this.init_cart();
    
 
 },
   methods:{
+
+
+
+	//初始化购物车
+	init_cart(){
+
+		var cartdata = localStorage.getItem('cart')
+
+		console.log(cartdata)
+
+		if(cartdata == null){
+			this.cartlist = []
+		}else{
+			this.cartlist = JSON.parse(cartdata)
+
+		}
+		
+
+	},
 
 	  //计算价格
 
@@ -109,9 +129,9 @@ export default {
 
 		  var total = 0;
 
-		  for(let i=0,l=this.goods.length;i<l;i++){
+		  for(let i=0,l=this.cartlist.length;i<l;i++){
 
-			  total += (this.goods[i].price * this.goods[i].num);
+			  total += (this.cartlist[i].price * this.cartlist[i].num);
 
 			  
 		  }
@@ -123,7 +143,8 @@ export default {
 	  //删除商品
 	  delgood(index){
 
-		  this.goods.splice(index,1)
+		  this.cartlist.splice(index,1)
+		  localStorage.setItem('cart',JSON.stringify(this.cartlist))
 
 
 	  },
@@ -133,16 +154,23 @@ export default {
 
 		  if(type == '+'){
 
-			  this.goods[index].num++;
+			  this.cartlist[index].num++;
+			  localStorage.setItem("cart",JSON.stringify(this.cartlist))
 
 		  }else{
-			  if(this.goods[index].num == 1){
+			  if(this.cartlist[index].num == 1){
 
 				  this.delgood();
+				  
 			  }else{
 
-				  this.goods[index].num --;
+				  this.cartlist[index].num --;
+				  localStorage.setItem('cart',JSON.stringify(this.cartlist))
+				  
+				  
 			  }
+			  
+			  
 		  }
 
 	  }
